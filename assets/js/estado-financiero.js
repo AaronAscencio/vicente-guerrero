@@ -13,7 +13,7 @@ $(function(){
           content += `<h1>${anio}</h1>`
           content += data[anio].map(function(estado){
             return `<p> 
-                        <a href="${window.location.origin+estado['archivo']}" class="link-dark">
+                        <a href="${estado['archivo']}" class="link-dark">
                         <h3> <span>
                               <i class="fa fa-book" aria-hidden="true"></i>
                              </span>
