@@ -1,6 +1,6 @@
 const root = document.querySelector('#root');
 
-fetch('https://ndim.com.mx/contenido-web/get-gabinete/195/')
+fetch('https://ndim.com.mx/contenido-web/get-gabinete/106/')
   .then(response => response.json())
   .then(data => {
     const row = document.createElement('div');

@@ -1,33 +1,39 @@
-$(function(){
-    $.ajax({
-        type: "GET",
-        url: "https://www.ndim.com.mx/marco-normativo/get-marco-normativo-aplicable/195/",
-        success: function(data) {
-          if(data.hasOwnProperty('error')){
-            alert(data['error']);
-            return
-          }
-        const anios = Object.keys(data)
-        let content = ''
-        anios.forEach(function(anio){
-          content += `<h1>${anio}</h1>`
-          content += data[anio].map(function(marco){
-            return `<p> 
-                        <a href="${marco['archivo']}" class="link-dark">
-                        <h3> <span>
-                              <i class="fa fa-book" aria-hidden="true"></i>
-                             </span>
-                        ${marco['documento']['grupo']}-${marco['documento']['nombre']}-${marco['descripcion']}
-                        </h3>
-                        </a>
-                    </p>
-                    `
-          }).join('');
-        });
-        const id_marcos = $('#id_marcos');
-        id_marcos.html(content);
-        
+fetch('https://www.ndim.com.mx/marco-normativo/get-marco-normativo-aplicable/195/')
+  .then(response => response.json())
+  .then(data => {
+    // Obtener el contenedor de resultados
+    const resultadosContainer = document.getElementById('id_marcos');
+
+    // Iterar sobre los años
+    for (const anio in data) {
+      // Crear el título con el año
+      const tituloAnio = document.createElement('h2');
+      tituloAnio.textContent = anio;
+      resultadosContainer.appendChild(tituloAnio);
+
+      // Obtener los periodos para el año actual
+      const periodos = data[anio];
+
+      // Iterar sobre los periodos
+      for (const periodo in periodos) {
+        // Crear el subtítulo con el periodo
+        const subtituloPeriodo = document.createElement('h3');
+        subtituloPeriodo.textContent = periodo;
+        resultadosContainer.appendChild(subtituloPeriodo);
+
+        // Obtener las fracciones para el periodo actual
+        const marcos = periodos[periodo];
+
+        // Iterar sobre las fracciones
+        for (const marco of marcos) {
+          // Crear el párrafo con la descripción y el ID de la fracción
+          const parrafoMarco = document.createElement('h5');
+          parrafoMarco.innerHTML = `<i class="fa fa-book mr-1" aria-hidden="true"></i> <a href="${marco.archivo}" class="link-dark bg-transparent">${marco.documento.grupo}-${marco.documento.nombre}- ${marco.descripcion}<a>`;
+          resultadosContainer.appendChild(parrafoMarco);
         }
-    });
-    
-});
+      }
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
